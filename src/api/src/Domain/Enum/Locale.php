@@ -16,7 +16,7 @@ final class Locale extends Enum
     private const FR = 'fr';
 
     /**
-     * @return array
+     * @return string[]
      */
     public static function valuesAsArray(): array
     {

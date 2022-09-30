@@ -20,6 +20,7 @@ export default {
       },
     ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [{ rel: 'stylesheet', href: 'https://unpkg.com/element-ui/lib/theme-chalk/index.css' }],
   },
   /*
    ** Global CSS
@@ -29,7 +30,7 @@ export default {
    ** Plugins to load before mounting the App
    ** https://nuxtjs.org/guide/plugins
    */
-  plugins: ['@/plugins/i18n', '@/plugins/scroll-to-top.client'],
+  plugins: ['@/plugins/i18n', '@/plugins/scroll-to-top.client', '@/plugins/element-ui'],
   /*
    ** Auto import components
    ** See https://nuxtjs.org/api/configuration-components

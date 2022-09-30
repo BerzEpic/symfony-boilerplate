@@ -27,7 +27,7 @@ abstract class Storage
         $this->storage    = $storage;
     }
 
-    abstract protected function getDirectoryName() : string;
+    abstract protected function getDirectoryName(): string;
 
     private function getPath(string $filename): string
     {

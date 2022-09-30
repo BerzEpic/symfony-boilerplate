@@ -31,7 +31,14 @@ final class DeleteUser
      */
     public function deleteUser(User $user1): bool
     {
-        $this->profilePictureStorage->delete();
+        // Remove profile picture (if any).
+        $filename = $user1->getProfilePicture();
+        if ($filename !== null) {
+            $this->profilePictureStorage->delete($filename);
+        }
+
+        // Cascade = true will also delete the reset
+        // password token (if any).
         $this->userDao->delete($user1, true);
 
         return true;

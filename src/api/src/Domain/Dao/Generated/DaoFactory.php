@@ -20,9 +20,29 @@ class DaoFactory implements \Symfony\Contracts\Service\ServiceSubscriberInterfac
     private $container = null;
 
     /**
+     * @var \App\Domain\Dao\AuthorDao|null
+     */
+    private $authorDao = null;
+
+    /**
+     * @var \App\Domain\Dao\BookDao|null
+     */
+    private $bookDao = null;
+
+    /**
      * @var \App\Domain\Dao\DoctrineMigrationVersionDao|null
      */
     private $doctrineMigrationVersionDao = null;
+
+    /**
+     * @var \App\Domain\Dao\FormDao|null
+     */
+    private $formDao = null;
+
+    /**
+     * @var \App\Domain\Dao\Form2Dao|null
+     */
+    private $form2Dao = null;
 
     /**
      * @var \App\Domain\Dao\ResetPasswordTokenDao|null
@@ -39,6 +59,34 @@ class DaoFactory implements \Symfony\Contracts\Service\ServiceSubscriberInterfac
         $this->container = $container;
     }
 
+    public function getAuthorDao() : \App\Domain\Dao\AuthorDao
+    {
+        if (!$this->authorDao) {
+            $this->authorDao = $this->container->get('App\\Domain\\Dao\\AuthorDao');
+        }
+
+        return $this->authorDao;
+    }
+
+    public function setAuthorDao(\App\Domain\Dao\AuthorDao $authorDao) : void
+    {
+        $this->authorDao = $authorDao;
+    }
+
+    public function getBookDao() : \App\Domain\Dao\BookDao
+    {
+        if (!$this->bookDao) {
+            $this->bookDao = $this->container->get('App\\Domain\\Dao\\BookDao');
+        }
+
+        return $this->bookDao;
+    }
+
+    public function setBookDao(\App\Domain\Dao\BookDao $bookDao) : void
+    {
+        $this->bookDao = $bookDao;
+    }
+
     public function getDoctrineMigrationVersionDao() : \App\Domain\Dao\DoctrineMigrationVersionDao
     {
         if (!$this->doctrineMigrationVersionDao) {
@@ -51,6 +99,34 @@ class DaoFactory implements \Symfony\Contracts\Service\ServiceSubscriberInterfac
     public function setDoctrineMigrationVersionDao(\App\Domain\Dao\DoctrineMigrationVersionDao $doctrineMigrationVersionDao) : void
     {
         $this->doctrineMigrationVersionDao = $doctrineMigrationVersionDao;
+    }
+
+    public function getFormDao() : \App\Domain\Dao\FormDao
+    {
+        if (!$this->formDao) {
+            $this->formDao = $this->container->get('App\\Domain\\Dao\\FormDao');
+        }
+
+        return $this->formDao;
+    }
+
+    public function setFormDao(\App\Domain\Dao\FormDao $formDao) : void
+    {
+        $this->formDao = $formDao;
+    }
+
+    public function getForm2Dao() : \App\Domain\Dao\Form2Dao
+    {
+        if (!$this->form2Dao) {
+            $this->form2Dao = $this->container->get('App\\Domain\\Dao\\Form2Dao');
+        }
+
+        return $this->form2Dao;
+    }
+
+    public function setForm2Dao(\App\Domain\Dao\Form2Dao $form2Dao) : void
+    {
+        $this->form2Dao = $form2Dao;
     }
 
     public function getResetPasswordTokenDao() : \App\Domain\Dao\ResetPasswordTokenDao
@@ -87,7 +163,11 @@ class DaoFactory implements \Symfony\Contracts\Service\ServiceSubscriberInterfac
     public static function getSubscribedServices() : array
     {
         return [
+            'App\\Domain\\Dao\\AuthorDao' => 'App\\Domain\\Dao\\AuthorDao',
+            'App\\Domain\\Dao\\BookDao' => 'App\\Domain\\Dao\\BookDao',
             'App\\Domain\\Dao\\DoctrineMigrationVersionDao' => 'App\\Domain\\Dao\\DoctrineMigrationVersionDao',
+            'App\\Domain\\Dao\\FormDao' => 'App\\Domain\\Dao\\FormDao',
+            'App\\Domain\\Dao\\Form2Dao' => 'App\\Domain\\Dao\\Form2Dao',
             'App\\Domain\\Dao\\ResetPasswordTokenDao' => 'App\\Domain\\Dao\\ResetPasswordTokenDao',
             'App\\Domain\\Dao\\UserDao' => 'App\\Domain\\Dao\\UserDao',
         ];

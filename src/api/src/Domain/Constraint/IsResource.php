@@ -9,7 +9,8 @@ use Symfony\Component\Validator\Constraint;
 /**
  * @Annotation
  */
-final class IsResource extends Constraint {
+final class IsResource extends Constraint
+{
     /** @var mixed $message */
     public $message;
 }

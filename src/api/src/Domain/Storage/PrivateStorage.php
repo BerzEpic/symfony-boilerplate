@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 abstract class PrivateStorage extends Storage
 {
-    public function __construct (
+    public function __construct(
         ParameterBagInterface $parameters,
         ValidatorInterface $validator,
         FilesystemOperator $privateStorage
