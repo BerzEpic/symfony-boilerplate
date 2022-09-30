@@ -8,7 +8,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 final class ProfilePicture extends Storable
 {
-    #[Assert\Choice(choices: ['png', 'jpg'], message: 'user.pictures_extensions')]
+    /**
+     * @Assert\Choice({"png", "jpg"}, message="user.pictures_extensions")
+     */
     public function getExtension(): string
     {
         return parent::getExtension();

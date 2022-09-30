@@ -16,10 +16,9 @@ use Serializable;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use TheCodingMachine\GraphQLite\Annotations as GraphQLite;
+use TheCodingMachine\GraphQLite\Annotations\SourceField;
+use TheCodingMachine\GraphQLite\Annotations\Type;
 
-use function count;
-use function is_array;
 use function Safe\password_hash;
 use function serialize;
 use function strval;
@@ -30,17 +29,17 @@ use const PASSWORD_DEFAULT;
 /**
  * The User class maps the 'users' table in database.
  *
- * @DomainAssert\Unicity(table="users", column="email", message="user.email_not_unique", className=User::class)
+ * @Type
+ * @SourceField(name="id", outputType="ID")
+ * @SourceField(name="firstName")
+ * @SourceField(name="lastName")
+ * @SourceField(name="email")
+ * @SourceField(name="locale")
+ * @SourceField(name="profilePicture")
+ * @SourceField(name="role")
+ * @SourceField(name="activated")
+ * @DomainAssert\Unicity(table="users", column="email", message="user.email_not_unique")
  */
-#[GraphQLite\Type]
-#[GraphQLite\SourceField(name: 'id', outputType: 'ID')]
-#[GraphQLite\SourceField(name: 'firstName')]
-#[GraphQLite\SourceField(name: 'lastName')]
-#[GraphQLite\SourceField(name: 'email')]
-#[GraphQLite\SourceField(name: 'locale')]
-#[GraphQLite\SourceField(name: 'profilePicture')]
-#[GraphQLite\SourceField(name: 'role')]
-#[GraphQLite\SourceField(name: 'activated')]
 class User extends BaseUser implements UserInterface, Serializable, EquatableInterface
 {
     public function __construct(
@@ -51,11 +50,11 @@ class User extends BaseUser implements UserInterface, Serializable, EquatableInt
         Role $role
     ) {
         parent::__construct(
-            firstName: $firstName,
-            lastName : $lastName,
-            email    : $email,
-            locale   : strval($locale),
-            role     : strval($role)
+            $firstName,
+            $lastName,
+            $email,
+            strval($locale),
+            strval($role)
         );
     }
 
@@ -168,14 +167,15 @@ class User extends BaseUser implements UserInterface, Serializable, EquatableInt
         return serialize([$this->userNameFromSerialize]);
     }
 
-    public function unserialize(string $data): void
+    /**
+     * phpcs:disable
+     *
+     * @param string $serialized
+     */
+    public function unserialize($serialized): void
     {
-        $data = unserialize($data);
-        if (! is_array($data) || count($data) !== 1) {
-            return;
-        }
-
-        $this->userNameFromSerialize = $data[0];
+        // phpcs:enable
+        [$this->userNameFromSerialize] = unserialize($serialized);
     }
 
     /**

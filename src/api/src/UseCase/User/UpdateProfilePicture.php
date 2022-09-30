@@ -31,11 +31,13 @@ final class UpdateProfilePicture
     /**
      * @throws InvalidStorable
      * @throws InvalidModel
+     *
+     * @Mutation
+     * @Logged
+     * @InjectUser(for="$user")
      */
-    #[Mutation]
-    #[Logged]
     public function updateProfilePicture(
-        #[InjectUser] User $user,
+        User $user,
         UploadedFileInterface $profilePicture
     ): User {
         $storable = ProfilePicture::createFromUploadedFile($profilePicture);

@@ -14,10 +14,10 @@ abstract class DownloadController extends AbstractController
     {
         $response          = new Response($fileContent);
         $dispositionHeader = $response->headers->makeDisposition(
-            disposition: $disposition,
-            filename   : $filename
+            $disposition,
+            $filename
         );
-        $response->headers->set(key: 'Content-Disposition', values: $dispositionHeader);
+        $response->headers->set('Content-Disposition', $dispositionHeader);
 
         return $response;
     }
@@ -25,18 +25,18 @@ abstract class DownloadController extends AbstractController
     protected function createResponseWithAttachment(string $filename, string $fileContent): Response
     {
         return $this->createResponse(
-            filename   : $filename,
-            fileContent: $fileContent,
-            disposition: ResponseHeaderBag::DISPOSITION_ATTACHMENT
+            $filename,
+            $fileContent,
+            ResponseHeaderBag::DISPOSITION_ATTACHMENT
         );
     }
 
     protected function createResponseInline(string $filename, string $fileContent): Response
     {
         return $this->createResponse(
-            filename   : $filename,
-            fileContent: $fileContent,
-            disposition: ResponseHeaderBag::DISPOSITION_INLINE
+            $filename,
+            $fileContent,
+            ResponseHeaderBag::DISPOSITION_INLINE
         );
     }
 }

@@ -11,11 +11,12 @@ use Symfony\Component\Validator\Constraint;
  */
 final class Unicity extends Constraint
 {
-    public string $message;
-    public string $table;
-    public string $column;
-    /** @var class-string $className */
-    public string $className;
+    /** @var mixed $message */
+    public $message;
+    /** @var mixed $table */
+    public $table;
+    /** @var mixed $column */
+    public $column;
 
     public function getTargets(): string
     {
@@ -31,7 +32,6 @@ final class Unicity extends Constraint
             'message',
             'table',
             'column',
-            'className',
         ];
     }
 }

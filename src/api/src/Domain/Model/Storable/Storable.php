@@ -69,7 +69,10 @@ abstract class Storable
         return $storables;
     }
 
-    public static function createFromUploadedFile(UploadedFileInterface $uploadedFile): static
+    /**
+     * @return static
+     */
+    public static function createFromUploadedFile(UploadedFileInterface $uploadedFile)
     {
         $fileName = $uploadedFile->getClientFilename();
         $resource = $uploadedFile->getStream()->detach();
@@ -86,7 +89,7 @@ abstract class Storable
             );
         }
 
-        return new static(filename: $fileName, resource: $resource);
+        return new static($fileName, $resource);
     }
 
     /**
@@ -105,11 +108,14 @@ abstract class Storable
         return $storables;
     }
 
-    public static function createFromPath(string $path): static
+    /**
+     * @return static
+     */
+    public static function createFromPath(string $path): Storable
     {
         $file     = new SplFileInfo($path);
         $resource = fopen($path, 'r');
 
-        return new static(filename: $file->getFilename(), resource: $resource);
+        return new static($file->getFilename(), $resource);
     }
 }

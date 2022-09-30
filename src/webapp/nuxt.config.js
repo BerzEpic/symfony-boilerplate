@@ -5,10 +5,6 @@ export default {
    */
   target: 'server',
   /*
-   ** SSR Feature (server side rendering)
-   */
-  ssr: true,
-  /*
    ** Headers of the page
    ** See https://nuxtjs.org/api/configuration-head
    */
@@ -52,7 +48,6 @@ export default {
   publicRuntimeConfig: {
     appName: process.env.APP_NAME,
     apiURL: process.env.API_URL,
-    GRAPHQL_ENDPOINT: process.env.GRAPHQL_URL,
   },
 
   privateRuntimeConfig: {
@@ -118,7 +113,7 @@ export default {
     /**
      * Your GraphQL endpoint (required)
      */
-    // endpoint: process.env.GRAPHQL_URL,
+    endpoint: process.env.GRAPHQL_URL,
 
     /**
      * Options

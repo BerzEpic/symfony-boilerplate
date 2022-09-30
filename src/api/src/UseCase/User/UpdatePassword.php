@@ -37,8 +37,9 @@ final class UpdatePassword
      * @throws WrongResetPasswordToken
      * @throws ResetPasswordTokenExpired
      * @throws InvalidModel
+     *
+     * @Mutation
      */
-    #[Mutation]
     public function updatePassword(
         ResetPasswordToken $resetPasswordToken,
         string $plainToken,

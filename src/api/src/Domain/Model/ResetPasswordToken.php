@@ -9,7 +9,8 @@ declare(strict_types=1);
 namespace App\Domain\Model;
 
 use App\Domain\Model\Generated\BaseResetPasswordToken;
-use TheCodingMachine\GraphQLite\Annotations as GraphQLite;
+use TheCodingMachine\GraphQLite\Annotations\SourceField;
+use TheCodingMachine\GraphQLite\Annotations\Type;
 
 use function Safe\password_hash;
 
@@ -17,9 +18,10 @@ use const PASSWORD_DEFAULT;
 
 /**
  * The ResetPasswordToken class maps the 'reset_password_tokens' table in database.
+ *
+ * @Type
+ * @SourceField(name="id", outputType="ID")
  */
-#[GraphQLite\Type]
-#[GraphQLite\SourceField(name: 'id', outputType: 'ID')]
 class ResetPasswordToken extends BaseResetPasswordToken
 {
     public function setToken(string $token): void

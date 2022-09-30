@@ -19,7 +19,6 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 use TheCodingMachine\GraphQLite\Annotations\Factory;
 use TheCodingMachine\GraphQLite\Annotations\HideParameter;
 use TheCodingMachine\TDBM\ResultIterator;
-use TheCodingMachine\TDBM\TDBMException;
 use TheCodingMachine\TDBM\TDBMService;
 
 /**
@@ -32,18 +31,16 @@ class UserDao extends BaseUserDao
     public function __construct(TDBMService $tdbmService, ValidatorInterface $validator)
     {
         $this->validator = $validator;
-        parent::__construct(tdbmService: $tdbmService);
+        parent::__construct($tdbmService);
     }
 
     /**
-     * @throws TDBMException
-     *
      * @Factory
      * @HideParameter(for="$lazyLoading")
      */
     public function getById(string $id, bool $lazyLoading = false): User
     {
-        return parent::getById(id: $id, lazyLoading: $lazyLoading);
+        return parent::getById($id, $lazyLoading);
     }
 
     /**
@@ -57,8 +54,6 @@ class UserDao extends BaseUserDao
 
     /**
      * @throws InvalidModel
-     *
-     * @noinspection PhpParameterNameChangedDuringInheritanceInspection
      */
     public function save(User $user): void
     {

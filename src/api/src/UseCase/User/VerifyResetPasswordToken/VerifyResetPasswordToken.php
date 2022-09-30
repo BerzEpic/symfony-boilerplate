@@ -24,8 +24,9 @@ final class VerifyResetPasswordToken
      * @throws InvalidResetPasswordTokenId
      * @throws WrongResetPasswordToken
      * @throws ResetPasswordTokenExpired
+     *
+     * @Mutation
      */
-    #[Mutation]
     public function verifyResetPasswordToken(
         string $resetPasswordTokenId,
         string $plainToken

@@ -2,87 +2,69 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\UseCase\User;
-
 use App\Domain\Dao\UserDao;
 use App\Domain\Enum\Filter\SortOrder;
 use App\Domain\Enum\Filter\UsersSortBy;
 use App\Domain\Enum\Locale;
 use App\Domain\Enum\Role;
 use App\Domain\Model\User;
-use App\Tests\UseCase\UseCaseTestCase;
 use App\UseCase\User\GetUsers;
 
-use function assert;
 use function PHPUnit\Framework\assertCount;
 use function PHPUnit\Framework\assertEquals;
 use function PHPUnit\Framework\assertStringContainsStringIgnoringCase;
 
-class GetUsersTest extends UseCaseTestCase
-{
-    private GetUsers $getUsers;
+beforeEach(function (): void {
+    $userDao = self::$container->get(UserDao::class);
+    assert($userDao instanceof UserDao);
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $userDao = self::getFromContainer(UserDao::class);
-        assert($userDao instanceof UserDao);
-        $this->getUsers = self::getFromContainer(GetUsers::class);
+    $user = new User(
+        'a',
+        'a',
+        'a.a@a.a',
+        Locale::EN(),
+        Role::ADMINISTRATOR()
+    );
+    $userDao->save($user);
 
-        $user = new User(
-            'a',
-            'a',
-            'a.a@a.a',
-            Locale::EN(),
-            Role::ADMINISTRATOR()
-        );
-        $userDao->save($user);
+    $user = new User(
+        'b',
+        'b',
+        'b.b@b.b',
+        Locale::EN(),
+        Role::USER()
+    );
+    $userDao->save($user);
 
-        $user = new User(
-            'b',
-            'b',
-            'b.b@b.b',
-            Locale::EN(),
-            Role::USER()
-        );
-        $userDao->save($user);
+    $user = new User(
+        'c',
+        'c',
+        'c.c@c.c',
+        Locale::EN(),
+        Role::USER()
+    );
+    $userDao->save($user);
+});
 
-        $user = new User(
-            'c',
-            'c',
-            'c.c@c.c',
-            Locale::EN(),
-            Role::USER()
-        );
-        $userDao->save($user);
-    }
+it(
+    'finds all users',
+    function (): void {
+        $getUsers = self::$container->get(GetUsers::class);
+        assert($getUsers instanceof GetUsers);
 
-    /**
-     * @group        User
-     */
-    public function testFindsAllUsers(): void
-    {
-        $result = $this->getUsers->users();
+        $result = $getUsers->users();
         assertCount(3, $result);
     }
+)
+    ->group('user');
 
-    /**
-     * @return iterable<array{string}>
-     */
-    public function providesSearchQueries(): iterable
-    {
-        yield ['a'];
-        yield ['b'];
-        yield ['c'];
-    }
+it(
+    'filters users with a generic search',
+    function (string $search): void {
+        $getUsers = self::$container->get(GetUsers::class);
+        assert($getUsers instanceof GetUsers);
 
-    /**
-     * @dataProvider providesSearchQueries
-     * @group        User
-     */
-    public function testFiltersUsersWithAGenericSearch(string $search): void
-    {
-        $result = $this->getUsers->users($search);
+        $result = $getUsers->users($search);
         assertCount(1, $result);
 
         $user = $result->first();
@@ -91,23 +73,17 @@ class GetUsersTest extends UseCaseTestCase
         assertStringContainsStringIgnoringCase($search, $user->getLastName());
         assertStringContainsStringIgnoringCase($search, $user->getEmail());
     }
+)
+    ->with(['a', 'b', 'c'])
+    ->group('user');
 
-    /**
-     * @return iterable<array{Role}>
-     */
-    public function providesRoles(): iterable
-    {
-        yield [Role::ADMINISTRATOR()];
-        yield [Role::USER()];
-    }
+it(
+    'filters users by role',
+    function (Role $role): void {
+        $getUsers = self::$container->get(GetUsers::class);
+        assert($getUsers instanceof GetUsers);
 
-    /**
-     * @dataProvider providesRoles
-     * @group        User
-     */
-    public function testFiltersUsersByRole(Role $role): void
-    {
-        $result = $this->getUsers->users(null, $role);
+        $result = $getUsers->users(null, $role);
 
         if ($role->equals(Role::ADMINISTRATOR())) {
             assertCount(1, $result);
@@ -121,23 +97,17 @@ class GetUsersTest extends UseCaseTestCase
         assert($user instanceof User);
         assertEquals($role, $user->getRole());
     }
+)
+    ->with([Role::ADMINISTRATOR(), Role::USER()])
+    ->group('user');
 
-    /**
-     * @return iterable<array{SortOrder}>
-     */
-    public function providesSortOrder(): iterable
-    {
-        yield [SortOrder::ASC()];
-        yield [SortOrder::DESC()];
-    }
+it(
+    'sorts users by first name',
+    function (SortOrder $sortOrder): void {
+        $getUsers = self::$container->get(GetUsers::class);
+        assert($getUsers instanceof GetUsers);
 
-    /**
-     * @dataProvider providesSortOrder
-     * @group        User
-     */
-    public function testSortsUsersByFirstName(SortOrder $sortOrder): void
-    {
-        $result = $this->getUsers->users(null, null, UsersSortBy::FIRST_NAME(), $sortOrder);
+        $result = $getUsers->users(null, null, UsersSortBy::FIRST_NAME(), $sortOrder);
         assertCount(3, $result);
 
         /** @var User[] $users */
@@ -152,14 +122,17 @@ class GetUsersTest extends UseCaseTestCase
             assertStringContainsStringIgnoringCase('c', $users[0]->getFirstName());
         }
     }
+)
+    ->with([SortOrder::ASC(), SortOrder::DESC()])
+    ->group('user');
 
-    /**
-     * @dataProvider providesSortOrder
-     * @group        User
-     */
-    public function testSortsUsersByLastName(SortOrder $sortOrder): void
-    {
-        $result = $this->getUsers->users(null, null, UsersSortBy::LAST_NAME(), $sortOrder);
+it(
+    'sorts users by last name',
+    function (SortOrder $sortOrder): void {
+        $getUsers = self::$container->get(GetUsers::class);
+        assert($getUsers instanceof GetUsers);
+
+        $result = $getUsers->users(null, null, UsersSortBy::LAST_NAME(), $sortOrder);
         assertCount(3, $result);
 
         /** @var User[] $users */
@@ -174,14 +147,17 @@ class GetUsersTest extends UseCaseTestCase
             assertStringContainsStringIgnoringCase('c', $users[0]->getLastName());
         }
     }
+)
+    ->with([SortOrder::ASC(), SortOrder::DESC()])
+    ->group('user');
 
-    /**
-     * @dataProvider providesSortOrder
-     * @group        User
-     */
-    public function testSortsUsersByEmail(SortOrder $sortOrder): void
-    {
-        $result = $this->getUsers->users(null, null, UsersSortBy::EMAIL(), $sortOrder);
+it(
+    'sorts users by e-mail',
+    function (SortOrder $sortOrder): void {
+        $getUsers = self::$container->get(GetUsers::class);
+        assert($getUsers instanceof GetUsers);
+
+        $result = $getUsers->users(null, null, UsersSortBy::EMAIL(), $sortOrder);
         assertCount(3, $result);
 
         /** @var User[] $users */
@@ -197,4 +173,6 @@ class GetUsersTest extends UseCaseTestCase
             assertStringContainsStringIgnoringCase('c', $users[0]->getEmail());
         }
     }
-}
+)
+    ->with([SortOrder::ASC(), SortOrder::DESC()])
+    ->group('user');

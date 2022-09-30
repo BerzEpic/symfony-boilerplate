@@ -11,12 +11,14 @@ use TheCodingMachine\GraphQLite\Annotations\Security;
 
 final class GetUser
 {
-    #[Query]
-    #[Logged]
-    #[Security("is_granted('GET_USER', user)")]
-    public function user(User $user): User
+    /**
+     * @Query
+     * @Logged
+     * @Security("is_granted('GET_USER', user1)")
+     */
+    public function user(User $user1): User
     {
         // GraphQLite black magic.
-        return $user;
+        return $user1;
     }
 }

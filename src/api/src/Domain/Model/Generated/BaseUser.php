@@ -24,6 +24,7 @@ use TheCodingMachine\GraphQLite\Annotations\Field as GraphqlField;
  */
 abstract class BaseUser extends \TheCodingMachine\TDBM\AbstractTDBMObject implements JsonSerializable
 {
+
     /**
      * @var \TheCodingMachine\TDBM\Schema\ForeignKeys
      */
@@ -216,7 +217,7 @@ abstract class BaseUser extends \TheCodingMachine\TDBM\AbstractTDBMObject implem
      */
     public function getResetPasswordToken() : ?\App\Domain\Model\ResetPasswordToken
     {
-        return $this->retrieveManyToOneRelationshipsStorage('reset_password_tokens', 'from__user_id__to__table__users__columns__id', ['reset_password_tokens.user_id' => $this->get('id', 'users')], null, \App\Domain\ResultIterator\ResetPasswordTokenResultIterator::class)->first();
+        return $this->retrieveManyToOneRelationshipsStorage('reset_password_tokens', 'from__user_id__to__table__users__columns__id', ['reset_password_tokens.user_id' => $this->get('id', 'users')])->first();
     }
 
     /**

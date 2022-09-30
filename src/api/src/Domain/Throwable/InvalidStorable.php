@@ -8,7 +8,7 @@ use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
-use TheCodingMachine\GraphQLite\Validator\ValidationFailedException;
+use TheCodingMachine\Graphqlite\Validator\ValidationFailedException;
 
 use function assert;
 
@@ -44,12 +44,10 @@ final class InvalidStorable extends ValidationFailedException implements Busines
      *
      * @throws InvalidStorable
      */
-    public static function throwExceptionWithKey(
-        string $key,
-        ConstraintViolationListInterface $constraintViolationList
-    ): void {
+    public static function throwExceptionWithKey(string $key, ConstraintViolationListInterface $constraintViolationList): void
+    {
         if ($constraintViolationList->count() > 0) {
-            throw new self(key: $key, constraintViolationList: $constraintViolationList);
+            throw new self($key, $constraintViolationList);
         }
     }
 }

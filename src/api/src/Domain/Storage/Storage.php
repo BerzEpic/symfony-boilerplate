@@ -27,7 +27,7 @@ abstract class Storage
         $this->storage    = $storage;
     }
 
-    abstract protected function getDirectoryName(): string;
+    abstract protected function getDirectoryName() : string;
 
     private function getPath(string $filename): string
     {
@@ -99,8 +99,8 @@ abstract class Storage
         $path     = $this->getPath($filename);
 
         $this->storage->writeStream(
-            location: $path,
-            contents: $storable->getResource()
+            $path,
+            $storable->getResource()
         );
 
         return $filename;

@@ -2,27 +2,19 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\UseCase\User;
-
 use App\Domain\Enum\Locale;
 use App\Domain\Enum\Role;
-use App\Tests\UseCase\UseCaseTestCase;
 use App\UseCase\User\CreateUser;
 use App\UseCase\User\UpdateLocale;
 
-use function assert;
 use function PHPUnit\Framework\assertEquals;
 
-class UpdateLocaleTest extends UseCaseTestCase
-{
-    /**
-     * @group        User
-     */
-    public function testUpdatesTheLocale(): void
-    {
-        $createUser = self::getFromContainer(CreateUser::class);
+it(
+    'updates the locale',
+    function (): void {
+        $createUser = self::$container->get(CreateUser::class);
         assert($createUser instanceof CreateUser);
-        $updateLocale = self::getFromContainer(UpdateLocale::class);
+        $updateLocale = self::$container->get(UpdateLocale::class);
         assert($updateLocale instanceof UpdateLocale);
 
         $user = $createUser->createUser(
@@ -37,4 +29,5 @@ class UpdateLocaleTest extends UseCaseTestCase
 
         assertEquals(Locale::FR(), $user->getLocale());
     }
-}
+)
+    ->group('user');

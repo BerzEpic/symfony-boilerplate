@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-namespace App\Tests\UseCase\User;
-
 use App\Domain\Dao\UserDao;
 use App\Domain\Enum\Locale;
 use App\Domain\Enum\Role;
@@ -11,73 +9,64 @@ use App\Domain\Model\Storable\ProfilePicture;
 use App\Domain\Model\User;
 use App\Domain\Storage\ProfilePictureStorage;
 use App\Domain\Throwable\InvalidStorable;
-use App\Tests\UseCase\UseCaseTestCase;
 use App\UseCase\User\UpdateProfilePicture;
 
-use function dirname;
 use function PHPUnit\Framework\assertFalse;
 use function PHPUnit\Framework\assertNotNull;
 use function PHPUnit\Framework\assertTrue;
 
-class UpdateProfilePictureTest extends UseCaseTestCase
-{
-    private UserDao $userDao;
-    private UpdateProfilePicture $updateProfilePicture;
-    private ProfilePictureStorage $profilePictureStorage;
+beforeEach(function (): void {
+    $userDao = self::$container->get(UserDao::class);
+    assert($userDao instanceof UserDao);
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->userDao               = self::getFromContainer(UserDao::class);
-        $this->updateProfilePicture  = self::getFromContainer(UpdateProfilePicture::class);
-        $this->profilePictureStorage = self::getFromContainer(ProfilePictureStorage::class);
+    $user = new User(
+        'foo',
+        'bar',
+        'user@foo.com',
+        Locale::EN(),
+        Role::USER()
+    );
+    $user->setId('1');
+    $userDao->save($user);
+});
 
-        $user = new User(
-            'foo',
-            'bar',
-            'user@foo.com',
-            Locale::EN(),
-            Role::USER()
-        );
-        $user->setId('1');
-        $this->userDao->save($user);
-    }
+it('updates a profile picture', function (?string $filename): void {
+    $userDao = self::$container->get(UserDao::class);
+    assert($userDao instanceof UserDao);
+    $updateProfilePicture = self::$container->get(UpdateProfilePicture::class);
+    assert($updateProfilePicture instanceof UpdateProfilePicture);
+    $profilePictureStorage = self::$container->get(ProfilePictureStorage::class);
+    assert($profilePictureStorage instanceof ProfilePictureStorage);
 
-    /**
-     * @return iterable<array{string}>
-     */
-    public function providesValidFiles(): iterable
-    {
-        yield ['foo.png'];
+    $user     = $userDao->getById('1');
+    $storable = ProfilePicture::createFromPath(
+        dirname(__FILE__) . '/' . $filename
+    );
+    $user     = $updateProfilePicture->update($user, $storable);
 
-        yield ['foo.jpg'];
-    }
+    assertTrue($profilePictureStorage->fileExists($user->getProfilePicture()));
+})
+    ->with([
+        'foo.png',
+        'foo.jpg',
+    ])
+    ->group('user');
 
-    /**
-     * @dataProvider providesValidFiles
-     * @group        User
-     */
-    public function testUpdatesAProfilePicture(?string $filename): void
-    {
-        $user     = $this->userDao->getById('1');
-        $storable = ProfilePicture::createFromPath(
-            dirname(__FILE__) . '/' . $filename
-        );
-        $user     = $this->updateProfilePicture->update($user, $storable);
+it(
+    'deletes previous profile picture',
+    function (): void {
+        $userDao = self::$container->get(UserDao::class);
+        assert($userDao instanceof UserDao);
+        $updateProfilePicture = self::$container->get(UpdateProfilePicture::class);
+        assert($updateProfilePicture instanceof UpdateProfilePicture);
+        $profilePictureStorage = self::$container->get(ProfilePictureStorage::class);
+        assert($profilePictureStorage instanceof ProfilePictureStorage);
 
-        assertTrue($this->profilePictureStorage->fileExists($user->getProfilePicture()));
-    }
-
-    /**
-     * @group        User
-     */
-    public function testDeletesPreviousProfilePicture(): void
-    {
-        $user             = $this->userDao->getById('1');
+        $user             = $userDao->getById('1');
         $storable         = ProfilePicture::createFromPath(
             dirname(__FILE__) . '/foo.jpg'
         );
-        $user             = $this->updateProfilePicture->update($user, $storable);
+        $user             = $updateProfilePicture->update($user, $storable);
         $previousFilename = $user->getProfilePicture();
 
         assertNotNull($previousFilename);
@@ -85,22 +74,28 @@ class UpdateProfilePictureTest extends UseCaseTestCase
         $storable = ProfilePicture::createFromPath(
             dirname(__FILE__) . '/foo.jpg'
         );
-        $this->updateProfilePicture->update($user, $storable);
+        $updateProfilePicture->update($user, $storable);
 
-        assertFalse($this->profilePictureStorage->fileExists($previousFilename));
+        assertFalse($profilePictureStorage->fileExists($previousFilename));
     }
+)
+    ->group('user');
 
-    /**
-     * @group        User
-     */
-    public function testThrowsAnExceptionInValidProfilePicture(): void
-    {
-        $user     = $this->userDao->getById('1');
+it(
+    'throws an exception in valid profile picture',
+    function (): void {
+        $userDao = self::$container->get(UserDao::class);
+        assert($userDao instanceof UserDao);
+        $updateProfilePicture = self::$container->get(UpdateProfilePicture::class);
+        assert($updateProfilePicture instanceof UpdateProfilePicture);
+
+        $user     = $userDao->getById('1');
         $storable = ProfilePicture::createFromPath(
             dirname(__FILE__) . '/foo.txt'
         );
 
-        $this->expectException(InvalidStorable::class);
-        $this->updateProfilePicture->update($user, $storable);
+        $updateProfilePicture->update($user, $storable);
     }
-}
+)
+    ->throws(InvalidStorable::class)
+    ->group('user');

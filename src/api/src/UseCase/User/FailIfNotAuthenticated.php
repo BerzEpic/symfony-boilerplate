@@ -14,8 +14,10 @@ final class FailIfNotAuthenticated
         // Required so that Doctrine Coding Standard does not complain.
     }
 
-    #[Query]
-    #[Logged]
+    /**
+     * @Query
+     * @Logged
+     */
     public function failIfNotAuthenticated(): bool
     {
         return true;
