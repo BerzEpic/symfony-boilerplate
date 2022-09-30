@@ -1,76 +1,44 @@
 schema:
   tables:
-    authors:
+    categories:
       columns:
         id:
           primary_key: true
-          type: guid
-          fixed: true
-          length: 36
+          type: integer
           not_null: true
-          comment: '@UUID'
-        book_id:
-          type: guid
-          fixed: true
-          length: 36
-          not_null: true
-        first_name:
+          auto_increment: true
+        label:
           type: string
           length: 255
           not_null: true
-        last_name:
-          type: string
-          length: 255
-          not_null: true
-        country:
-          type: string
-          length: 255
-          not_null: true
-      indexes:
-        IDX_8E0C2A5116A2B381:
-          column: book_id
-          lengths:
-            - null
-      foreign_keys:
-        FK_8E0C2A5116A2B381:
-          column: book_id
-          references: books
-          onDelete: null
-          onUpdate: null
-    books:
+    categories_items:
       columns:
-        id:
+        category_id:
           primary_key: true
-          type: guid
-          fixed: true
-          length: 36
+          type: integer
           not_null: true
-          comment: '@UUID'
-        author_id:
-          type: guid
-          fixed: true
-          length: 36
-          not_null: true
-        title:
-          type: string
-          length: 255
-          not_null: true
-        category:
-          type: string
-          length: 255
-          not_null: true
-        chapters:
+        item_id:
+          primary_key: true
           type: integer
           not_null: true
       indexes:
-        IDX_4A1B2A92F675F31B:
-          column: author_id
+        IDX_E51DFC0012469DE2:
+          column: category_id
+          lengths:
+            - null
+        IDX_E51DFC00126F525E:
+          column: item_id
           lengths:
             - null
       foreign_keys:
-        FK_4A1B2A92F675F31B:
-          column: author_id
-          references: authors
+        FK_E51DFC0012469DE2:
+          column: category_id
+          references: categories
+          onDelete: null
+          onUpdate: null
+        FK_E51DFC00126F525E:
+          column: item_id
+          references: items
           onDelete: null
           onUpdate: null
     doctrine_migration_versions:
@@ -84,66 +52,17 @@ schema:
           type: datetime
           length: 0
         execution_time: integer
-    form:
+    items:
       columns:
         id:
           primary_key: true
-          type: guid
-          fixed: true
-          length: 36
+          type: integer
           not_null: true
-          comment: '@UUID'
-        first_name:
+          auto_increment: true
+        label:
           type: string
           length: 255
           not_null: true
-        last_name:
-          type: string
-          length: 255
-          not_null: true
-        email:
-          type: string
-          length: 255
-          not_null: true
-      indexes:
-        email:
-          column: email
-          unique: true
-          lengths:
-            - null
-    form2:
-      columns:
-        id:
-          primary_key: true
-          type: guid
-          fixed: true
-          length: 36
-          not_null: true
-          comment: '@UUID'
-        form_id:
-          type: guid
-          fixed: true
-          length: 36
-          not_null: true
-        first_name:
-          type: string
-          length: 255
-          not_null: true
-        last_name:
-          type: string
-          length: 255
-          not_null: true
-      indexes:
-        IDX_FCE46AF15FF69B7D:
-          column: form_id
-          lengths:
-            - null
-      foreign_keys:
-        FK_FCE46AF15FF69B7D:
-          column: form_id
-          references: form
-          onDelete: null
-          onUpdate: null
     reset_password_tokens:
       columns:
         id:

@@ -20,14 +20,9 @@ class DaoFactory implements \Symfony\Contracts\Service\ServiceSubscriberInterfac
     private $container = null;
 
     /**
-     * @var \App\Domain\Dao\AuthorDao|null
+     * @var \App\Domain\Dao\CategoryDao|null
      */
-    private $authorDao = null;
-
-    /**
-     * @var \App\Domain\Dao\BookDao|null
-     */
-    private $bookDao = null;
+    private $categoryDao = null;
 
     /**
      * @var \App\Domain\Dao\DoctrineMigrationVersionDao|null
@@ -35,14 +30,9 @@ class DaoFactory implements \Symfony\Contracts\Service\ServiceSubscriberInterfac
     private $doctrineMigrationVersionDao = null;
 
     /**
-     * @var \App\Domain\Dao\FormDao|null
+     * @var \App\Domain\Dao\ItemDao|null
      */
-    private $formDao = null;
-
-    /**
-     * @var \App\Domain\Dao\Form2Dao|null
-     */
-    private $form2Dao = null;
+    private $itemDao = null;
 
     /**
      * @var \App\Domain\Dao\ResetPasswordTokenDao|null
@@ -59,32 +49,18 @@ class DaoFactory implements \Symfony\Contracts\Service\ServiceSubscriberInterfac
         $this->container = $container;
     }
 
-    public function getAuthorDao() : \App\Domain\Dao\AuthorDao
+    public function getCategoryDao() : \App\Domain\Dao\CategoryDao
     {
-        if (!$this->authorDao) {
-            $this->authorDao = $this->container->get('App\\Domain\\Dao\\AuthorDao');
+        if (!$this->categoryDao) {
+            $this->categoryDao = $this->container->get('App\\Domain\\Dao\\CategoryDao');
         }
 
-        return $this->authorDao;
+        return $this->categoryDao;
     }
 
-    public function setAuthorDao(\App\Domain\Dao\AuthorDao $authorDao) : void
+    public function setCategoryDao(\App\Domain\Dao\CategoryDao $categoryDao) : void
     {
-        $this->authorDao = $authorDao;
-    }
-
-    public function getBookDao() : \App\Domain\Dao\BookDao
-    {
-        if (!$this->bookDao) {
-            $this->bookDao = $this->container->get('App\\Domain\\Dao\\BookDao');
-        }
-
-        return $this->bookDao;
-    }
-
-    public function setBookDao(\App\Domain\Dao\BookDao $bookDao) : void
-    {
-        $this->bookDao = $bookDao;
+        $this->categoryDao = $categoryDao;
     }
 
     public function getDoctrineMigrationVersionDao() : \App\Domain\Dao\DoctrineMigrationVersionDao
@@ -101,32 +77,18 @@ class DaoFactory implements \Symfony\Contracts\Service\ServiceSubscriberInterfac
         $this->doctrineMigrationVersionDao = $doctrineMigrationVersionDao;
     }
 
-    public function getFormDao() : \App\Domain\Dao\FormDao
+    public function getItemDao() : \App\Domain\Dao\ItemDao
     {
-        if (!$this->formDao) {
-            $this->formDao = $this->container->get('App\\Domain\\Dao\\FormDao');
+        if (!$this->itemDao) {
+            $this->itemDao = $this->container->get('App\\Domain\\Dao\\ItemDao');
         }
 
-        return $this->formDao;
+        return $this->itemDao;
     }
 
-    public function setFormDao(\App\Domain\Dao\FormDao $formDao) : void
+    public function setItemDao(\App\Domain\Dao\ItemDao $itemDao) : void
     {
-        $this->formDao = $formDao;
-    }
-
-    public function getForm2Dao() : \App\Domain\Dao\Form2Dao
-    {
-        if (!$this->form2Dao) {
-            $this->form2Dao = $this->container->get('App\\Domain\\Dao\\Form2Dao');
-        }
-
-        return $this->form2Dao;
-    }
-
-    public function setForm2Dao(\App\Domain\Dao\Form2Dao $form2Dao) : void
-    {
-        $this->form2Dao = $form2Dao;
+        $this->itemDao = $itemDao;
     }
 
     public function getResetPasswordTokenDao() : \App\Domain\Dao\ResetPasswordTokenDao
@@ -163,11 +125,9 @@ class DaoFactory implements \Symfony\Contracts\Service\ServiceSubscriberInterfac
     public static function getSubscribedServices() : array
     {
         return [
-            'App\\Domain\\Dao\\AuthorDao' => 'App\\Domain\\Dao\\AuthorDao',
-            'App\\Domain\\Dao\\BookDao' => 'App\\Domain\\Dao\\BookDao',
+            'App\\Domain\\Dao\\CategoryDao' => 'App\\Domain\\Dao\\CategoryDao',
             'App\\Domain\\Dao\\DoctrineMigrationVersionDao' => 'App\\Domain\\Dao\\DoctrineMigrationVersionDao',
-            'App\\Domain\\Dao\\FormDao' => 'App\\Domain\\Dao\\FormDao',
-            'App\\Domain\\Dao\\Form2Dao' => 'App\\Domain\\Dao\\Form2Dao',
+            'App\\Domain\\Dao\\ItemDao' => 'App\\Domain\\Dao\\ItemDao',
             'App\\Domain\\Dao\\ResetPasswordTokenDao' => 'App\\Domain\\Dao\\ResetPasswordTokenDao',
             'App\\Domain\\Dao\\UserDao' => 'App\\Domain\\Dao\\UserDao',
         ];
