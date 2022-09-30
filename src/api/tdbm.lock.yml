@@ -1,46 +1,5 @@
 schema:
   tables:
-    categories:
-      columns:
-        id:
-          primary_key: true
-          type: integer
-          not_null: true
-          auto_increment: true
-        label:
-          type: string
-          length: 255
-          not_null: true
-    categories_items:
-      columns:
-        category_id:
-          primary_key: true
-          type: integer
-          not_null: true
-        item_id:
-          primary_key: true
-          type: integer
-          not_null: true
-      indexes:
-        IDX_E51DFC0012469DE2:
-          column: category_id
-          lengths:
-            - null
-        IDX_E51DFC00126F525E:
-          column: item_id
-          lengths:
-            - null
-      foreign_keys:
-        FK_E51DFC0012469DE2:
-          column: category_id
-          references: categories
-          onDelete: null
-          onUpdate: null
-        FK_E51DFC00126F525E:
-          column: item_id
-          references: items
-          onDelete: null
-          onUpdate: null
     doctrine_migration_versions:
       columns:
         version:
@@ -52,17 +11,6 @@ schema:
           type: datetime
           length: 0
         execution_time: integer
-    items:
-      columns:
-        id:
-          primary_key: true
-          type: integer
-          not_null: true
-          auto_increment: true
-        label:
-          type: string
-          length: 255
-          not_null: true
     reset_password_tokens:
       columns:
         id:

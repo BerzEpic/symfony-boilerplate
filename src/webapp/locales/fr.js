@@ -1,8 +1,6 @@
 export default {
   // All translations that you use in different places.
   common: {
-    category: 'Catégory',
-    item: 'Objet',
     email: {
       label: 'Email',
       label_required: 'Email *',
@@ -62,8 +60,6 @@ export default {
       dashboard: 'Tableau de bord',
       administration: 'Administration',
       users: 'Utilisateurs',
-      categories: 'Catégories',
-      items: 'Objets',
     },
     list: {
       actions: 'Actions',
@@ -99,7 +95,7 @@ export default {
     home: {
       welcome: 'Bienvenue !',
       message:
-        'Ceci est juste une application CRUD simple pour les articles et les catégories',
+        'Le Symfony Boilerplate fournit une application factice avec des concepts et des fonctionnalités de base pour vous aider à créer une application web moderne.',
     },
     login: {
       password: {

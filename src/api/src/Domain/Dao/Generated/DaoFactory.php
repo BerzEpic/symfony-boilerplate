@@ -20,19 +20,9 @@ class DaoFactory implements \Symfony\Contracts\Service\ServiceSubscriberInterfac
     private $container = null;
 
     /**
-     * @var \App\Domain\Dao\CategoryDao|null
-     */
-    private $categoryDao = null;
-
-    /**
      * @var \App\Domain\Dao\DoctrineMigrationVersionDao|null
      */
     private $doctrineMigrationVersionDao = null;
-
-    /**
-     * @var \App\Domain\Dao\ItemDao|null
-     */
-    private $itemDao = null;
 
     /**
      * @var \App\Domain\Dao\ResetPasswordTokenDao|null
@@ -49,20 +39,6 @@ class DaoFactory implements \Symfony\Contracts\Service\ServiceSubscriberInterfac
         $this->container = $container;
     }
 
-    public function getCategoryDao() : \App\Domain\Dao\CategoryDao
-    {
-        if (!$this->categoryDao) {
-            $this->categoryDao = $this->container->get('App\\Domain\\Dao\\CategoryDao');
-        }
-
-        return $this->categoryDao;
-    }
-
-    public function setCategoryDao(\App\Domain\Dao\CategoryDao $categoryDao) : void
-    {
-        $this->categoryDao = $categoryDao;
-    }
-
     public function getDoctrineMigrationVersionDao() : \App\Domain\Dao\DoctrineMigrationVersionDao
     {
         if (!$this->doctrineMigrationVersionDao) {
@@ -75,20 +51,6 @@ class DaoFactory implements \Symfony\Contracts\Service\ServiceSubscriberInterfac
     public function setDoctrineMigrationVersionDao(\App\Domain\Dao\DoctrineMigrationVersionDao $doctrineMigrationVersionDao) : void
     {
         $this->doctrineMigrationVersionDao = $doctrineMigrationVersionDao;
-    }
-
-    public function getItemDao() : \App\Domain\Dao\ItemDao
-    {
-        if (!$this->itemDao) {
-            $this->itemDao = $this->container->get('App\\Domain\\Dao\\ItemDao');
-        }
-
-        return $this->itemDao;
-    }
-
-    public function setItemDao(\App\Domain\Dao\ItemDao $itemDao) : void
-    {
-        $this->itemDao = $itemDao;
     }
 
     public function getResetPasswordTokenDao() : \App\Domain\Dao\ResetPasswordTokenDao
@@ -125,9 +87,7 @@ class DaoFactory implements \Symfony\Contracts\Service\ServiceSubscriberInterfac
     public static function getSubscribedServices() : array
     {
         return [
-            'App\\Domain\\Dao\\CategoryDao' => 'App\\Domain\\Dao\\CategoryDao',
             'App\\Domain\\Dao\\DoctrineMigrationVersionDao' => 'App\\Domain\\Dao\\DoctrineMigrationVersionDao',
-            'App\\Domain\\Dao\\ItemDao' => 'App\\Domain\\Dao\\ItemDao',
             'App\\Domain\\Dao\\ResetPasswordTokenDao' => 'App\\Domain\\Dao\\ResetPasswordTokenDao',
             'App\\Domain\\Dao\\UserDao' => 'App\\Domain\\Dao\\UserDao',
         ];
